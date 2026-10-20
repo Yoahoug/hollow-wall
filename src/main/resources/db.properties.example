@@ -1,0 +1,11 @@
+# 数据库连接配置模板
+#
+# 用法：复制本文件为同目录下的 db.properties，再填入真实的值
+#       cp db.properties.example db.properties
+#
+# 注意：db.properties 已经在 .gitignore 里，不要提交到仓库
+# 注意：db.properties 里不能写注释以外的中文，值保持一行
+
+jdbc.url=jdbc:mysql://<host>:<port>/hollow_wall?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+jdbc.user=<user>
+jdbc.password=<password>
