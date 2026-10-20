@@ -55,6 +55,11 @@ mvn -v
 表结构的唯一来源是仓库中的 SQL 脚本。结构需要调整时，由维护者修改脚本后统一执行，
 不要在数据库里直接改——直接改的字段不会出现在脚本中，其他人重新建库就是错的。
 
+建表脚本在仓库中的位置：`src/main/resources/Yoa_Schema.sql`。
+
+**阶段一已经执行过了**，4 张表（`sys_user`、`post`、`post_comment`、`post_like`）
+和 2 个测试账号都在共享库里。其他人拉代码后**不需要执行这个脚本**，直接连库即可。
+
 ### JDBC 连接串的四个参数
 
 ```properties
@@ -102,6 +107,18 @@ URL 中的 `hollow` 由打包产物名决定，不能省略。访问 `http://127
 会进入 Tomcat 首页，不是本系统。
 
 停止：`"$TOMCAT/bin/shutdown.sh"`（Windows 用 `shutdown.bat`）。
+
+### 改了代码怎么生效
+
+war 包解压出来的目录会被 Tomcat 缓存，只替换 war 有时不生效。
+最稳妥的做法是停 Tomcat、删掉解压目录、再启动：
+
+```bash
+# 停 Tomcat
+rm -rf "$TOMCAT/webapps/hollow"       # 删解压目录（Windows: rmdir /s /q）
+cp target/hollow.war "$TOMCAT/webapps/"
+# 启 Tomcat
+```
 
 ---
 
