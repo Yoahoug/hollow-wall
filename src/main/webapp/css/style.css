@@ -1,0 +1,212 @@
+/* ============================================================
+   Hollow 公共样式
+   全站共用，各模块自己的样式可以在页面里另写
+   ============================================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+    background: #f5f6f8;
+}
+
+a {
+    color: #3a6ea5;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 内容区统一宽度，居中 */
+.container {
+    width: 900px;
+    max-width: 94%;
+    margin: 0 auto;
+}
+
+/* ---------- 页头 ---------- */
+.site-header {
+    background: #fff;
+    border-bottom: 1px solid #e5e6e8;
+}
+
+.site-header .container {
+    display: flex;
+    align-items: center;
+    height: 56px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2f3b52;
+    margin-right: 28px;
+}
+
+.nav a {
+    margin-right: 18px;
+    color: #555;
+}
+
+.user-area {
+    margin-left: auto;
+    color: #666;
+}
+
+.user-area form {
+    display: inline;
+    margin: 0 0 0 6px;
+}
+
+/* 长得像链接的按钮，用于退出 */
+.link-btn {
+    border: none;
+    background: none;
+    padding: 0;
+    color: #3a6ea5;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.link-btn:hover {
+    text-decoration: underline;
+}
+
+/* ---------- 主体 ---------- */
+.main {
+    min-height: 420px;
+    padding: 24px 0;
+}
+
+/* ---------- 按钮 ---------- */
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 3px;
+    background: #3a6ea5;
+    color: #fff;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #335f8e;
+    text-decoration: none;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* ---------- 表单 ---------- */
+.form-item {
+    margin-bottom: 16px;
+}
+
+.form-item label {
+    display: block;
+    margin-bottom: 6px;
+    color: #555;
+}
+
+.form-item input,
+.form-item textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.form-item input:focus,
+.form-item textarea:focus {
+    outline: none;
+    border-color: #3a6ea5;
+}
+
+/* ---------- 登录注册卡片 ---------- */
+.auth-box {
+    width: 380px;
+    max-width: 100%;
+    margin: 40px auto;
+    padding: 28px 30px;
+    background: #fff;
+    border: 1px solid #e5e6e8;
+    border-radius: 4px;
+}
+
+.auth-box h2 {
+    margin: 0 0 20px;
+    font-size: 18px;
+    font-weight: normal;
+    text-align: center;
+}
+
+.auth-tip {
+    margin: 16px 0 0;
+    text-align: center;
+    color: #888;
+}
+
+/* ---------- 提示信息 ---------- */
+.msg {
+    padding: 8px 12px;
+    margin-bottom: 16px;
+    border-radius: 3px;
+}
+
+.msg-error {
+    background: #fdecea;
+    color: #b93a34;
+}
+
+.msg-success {
+    background: #eaf6ec;
+    color: #2f7a3f;
+}
+
+.muted {
+    color: #999;
+    font-size: 13px;
+}
+
+/* ---------- 占位页 ---------- */
+.placeholder {
+    padding: 40px;
+    background: #fff;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.placeholder h2 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+/* ---------- 页脚 ---------- */
+.site-footer {
+    padding: 20px 0;
+    border-top: 1px solid #e5e6e8;
+    background: #fff;
+    text-align: center;
+    color: #888;
+    font-size: 13px;
+}
+
+.site-footer p {
+    margin: 4px 0;
+}
