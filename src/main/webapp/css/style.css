@@ -210,3 +210,157 @@ a:hover {
 .site-footer p {
     margin: 4px 0;
 }
+
+
+
+/* 首页帖子列表 */
+.home-container {
+    max-width: 960px;
+    margin: 30px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.home-heading {
+    margin-bottom: 24px;
+}
+
+.home-heading h2 {
+    margin-bottom: 8px;
+    color: #263445;
+}
+
+.home-heading p {
+    color: #777;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.search-form input {
+    flex: 1;
+    min-width: 180px;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.search-form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #3867d6;
+    color: white;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background: #2853b5;
+}
+
+.search-form a {
+    color: #3867d6;
+    text-decoration: none;
+}
+
+.post-total {
+    margin: 16px 0;
+    color: #777;
+    font-size: 14px;
+}
+
+.post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.post-card {
+    padding: 20px;
+    border: 1px solid #e8eaf0;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.post-card h3 {
+    margin: 0 0 12px;
+    font-size: 19px;
+}
+
+.post-card h3 a {
+    color: #263445;
+    text-decoration: none;
+}
+
+.post-card h3 a:hover {
+    color: #3867d6;
+}
+
+.post-content {
+    color: #555;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+    color: #888;
+    font-size: 13px;
+}
+
+.empty-posts {
+    padding: 40px 20px;
+    text-align: center;
+    border: 1px dashed #ddd;
+    border-radius: 10px;
+    color: #777;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 28px 0;
+}
+
+.pagination a {
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    color: #3867d6;
+    text-decoration: none;
+}
+
+.pagination a:hover {
+    background: #f0f4ff;
+}
+
+@media (max-width: 600px) {
+    .home-container {
+        padding: 0 12px;
+    }
+
+    .post-card {
+        padding: 15px;
+    }
+
+    .post-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
