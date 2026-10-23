@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%-- 全站页脚，和 header.jsp 配对使用 --%>
+<%-- 全站页脚，和 Yoa_Header.jsp 配对使用 --%>
 </main>
 
 <footer class="site-footer">

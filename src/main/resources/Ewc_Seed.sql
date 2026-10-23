@@ -1,4 +1,4 @@
--- seed.sql：补充测试数据（可以重复执行，不会报错）
+-- Ewc_Seed.sql：补充测试数据（可以重复执行，不会报错）
 -- 往数据库里多塞几个用户和帖子，方便测试用户管理功能
 
 INSERT IGNORE INTO sys_user (email, password_hash, nickname, role, status) VALUES

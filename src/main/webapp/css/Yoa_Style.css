@@ -7,7 +7,15 @@
     box-sizing: border-box;
 }
 
+html {
+    height: 100%;
+}
+
+/* 竖向撑满一屏：内容少时页脚贴在窗口底部，不会浮在半空 */
 body {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
     margin: 0;
     font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
     font-size: 14px;
@@ -83,6 +91,7 @@ a:hover {
 
 /* ---------- 主体 ---------- */
 .main {
+    flex: 1 0 auto;
     min-height: 420px;
     padding: 24px 0;
 }

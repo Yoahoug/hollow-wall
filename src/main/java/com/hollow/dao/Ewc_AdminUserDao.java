@@ -6,6 +6,7 @@ import com.hollow.util.Yoa_DBUtil;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,31 +77,27 @@ public class Ewc_AdminUserDao {
             "DELETE FROM sys_user     WHERE id = ?"
         };
 
-        Connection conn = null;
-        try {
-            conn = Yoa_DBUtil.getConnection();
+        try (Connection conn = Yoa_DBUtil.getConnection()) {
             conn.setAutoCommit(false);  // 开启事务
 
-            for (String sql : sqls) {
-                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                    stmt.setLong(1, userId);
-                    stmt.executeUpdate();
+            try {
+                for (String sql : sqls) {
+                    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                        stmt.setLong(1, userId);
+                        stmt.executeUpdate();
+                    }
                 }
+
+                conn.commit();  // 全部成功才提交
+                return true;
+
+            } catch (Exception e) {
+                try { conn.rollback(); } catch (SQLException ignored) {}
+                throw new RuntimeException("删除用户失败", e);
             }
 
-            conn.commit();  // 全部成功才提交
-            return true;
-
-        } catch (Exception e) {
-            try { if (conn != null) conn.rollback(); } catch (Exception ignored) {}
+        } catch (SQLException e) {
             throw new RuntimeException("删除用户失败", e);
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                }
-            } catch (Exception ignored) {}
         }
     }
 

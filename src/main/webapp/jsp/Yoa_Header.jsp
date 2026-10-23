@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
-    全站页头。页面开头 include 本文件，结尾 include footer.jsp。
+    全站页头。页面开头 include 本文件，结尾 include Yoa_Footer.jsp。
     页面标题用 <c:set var="pageTitle" value="登录"/> 传。
 --%>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
@@ -26,6 +26,7 @@
                 <a href="${ctx}/app/my">我的</a>
                 <c:if test="${sessionScope.loginUser.admin}">
                     <a href="${ctx}/admin/review">后台</a>
+                    <a href="${ctx}/admin/stats">统计</a>
                 </c:if>
             </c:if>
         </span>

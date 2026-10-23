@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * 浏览侧使用的帖子对象。
  *
- * 只用于展示，因此类名不叫 Xhs_Post，避免和创作侧、治理侧各自的帖子实体重名。
+ * 只用于展示，因此不叫 Xhs_Post，避免和创作侧、治理侧各自的帖子实体重名。
  * 按分工约定，浏览侧对 post 表只有查询权限。
  */
 public class Yuj_PostView {

@@ -24,10 +24,15 @@ import java.util.List;
  */
 public class Xhs_PostWriteDao {
 
-    /** 查询用的列清单，两个查询方法共用 */
+    /**
+     * 查询用的列清单，两个查询方法共用。
+     * 评论数从 post_comment 实时统计，不读 post.comment_count 列：
+     * 写评论的一方不更新该列，读列会永远得到 0。
+     */
     private static final String COLUMNS =
             "id, user_id, title, content, status, reject_reason, reviewer_id, "
-          + "reviewed_at, like_count, comment_count, created_at";
+          + "reviewed_at, like_count, created_at, "
+          + "(SELECT COUNT(*) FROM post_comment c WHERE c.post_id = post.id) AS comment_count";
 
     /**
      * 新增一条帖子。状态固定 PENDING，等待审核。
@@ -131,7 +136,7 @@ public class Xhs_PostWriteDao {
     }
 
     /**
-     * 把结果集当前行转成 Xhs_Post 对象。
+     * 把结果集当前行转成帖子对象。
      */
     private Xhs_Post toPost(ResultSet rs) throws SQLException {
         Xhs_Post post = new Xhs_Post();

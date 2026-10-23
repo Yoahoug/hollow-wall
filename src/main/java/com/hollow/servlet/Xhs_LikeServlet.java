@@ -3,6 +3,7 @@ package com.hollow.servlet;
 import com.hollow.bean.Yoa_User;
 import com.hollow.service.Xhs_LikeService;
 import com.hollow.util.Yoa_AuthUtil;
+import com.hollow.util.Yoa_RedirectUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -60,11 +61,9 @@ public class Xhs_LikeServlet extends HttpServlet {
             session.setAttribute("flashType", "error");
         }
 
-        // 4. 跳回来源页面（点赞按钮可能在首页、详情页或"我的"页面），没有就回"我的"
-        String back = request.getHeader("Referer");
-        if (back == null || back.isBlank()) {
-            back = request.getContextPath() + "/app/my";
-        }
+        // 4. 跳回来源页面（点赞按钮可能在首页、详情页或"我的"页面），没有就回"我的"。
+        //    Referer 可被伪造，必须只取本站路径，否则会变成开放重定向
+        String back = Yoa_RedirectUtil.safeBackPath(request, request.getContextPath() + "/app/my");
         response.sendRedirect(back);
     }
 }

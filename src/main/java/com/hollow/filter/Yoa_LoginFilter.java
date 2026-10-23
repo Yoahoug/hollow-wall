@@ -47,15 +47,21 @@ public class Yoa_LoginFilter implements Filter {
             return;
         }
 
-        // 2. 没登录，先记下他想去的地址
-        String url = req.getRequestURI();
-        if (req.getQueryString() != null) {
-            // 带参数的地址要把 ? 后面也拼上，比如 /app/post?id=3
-            url = url + "?" + req.getQueryString();
-        }
-
+        // 2. 没登录，先记下他想去的地址。
+        //    只记 GET：POST 的提交内容（比如刚写好的评论）在跳转后拿不回来，
+        //    登录后按 GET 回跳只会得到 405，不如让用户回到首页重新操作
         HttpSession session = req.getSession();
-        session.setAttribute("redirectUrl", url);
+        if ("GET".equalsIgnoreCase(req.getMethod())) {
+            String url = req.getRequestURI();
+            if (req.getQueryString() != null) {
+                // 带参数的地址要把 ? 后面也拼上，比如 /app/post?id=3
+                url = url + "?" + req.getQueryString();
+            }
+            session.setAttribute("redirectUrl", url);
+        } else {
+            // POST 不记录，同时清掉之前可能残留的地址，避免登录后跳到旧页面
+            session.removeAttribute("redirectUrl");
+        }
 
         // 3. 跳到登录页
         resp.sendRedirect(req.getContextPath() + "/login");

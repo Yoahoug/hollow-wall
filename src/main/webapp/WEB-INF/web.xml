@@ -9,6 +9,14 @@
 
     <!-- Servlet 和过滤器都用 @WebServlet / @WebFilter 注解声明，这里只留必要配置 -->
 
+    <!--
+        POST 请求体的统一解码方式。
+        不写这两行时 Tomcat 按 ISO-8859-1 解析表单，中文提交换成乱码存进库。
+        放在这里对全站生效，各 Servlet 不用再单独调用 setCharacterEncoding。
+    -->
+    <request-character-encoding>UTF-8</request-character-encoding>
+    <response-character-encoding>UTF-8</response-character-encoding>
+
     <!-- 访问 /hollow/ 时先打开 Yoa_Index.jsp，由它转发到 /home -->
     <welcome-file-list>
         <welcome-file>Yoa_Index.jsp</welcome-file>

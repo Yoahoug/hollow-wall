@@ -78,7 +78,7 @@ JSP + Servlet + Service + DAO + JavaBean，MVC 分层，Tomcat 9 + MySQL 8。
 
 | 范围 | 内容 |
 | --- | --- |
-| 审核 | 待审队列、通过、驳回、隐藏 |
+| 审核 | 待审队列、通过、驳回 |
 | 用户管理 | 用户列表、停用、删除 |
 | 统计 | 图表数据查询与展示 |
 | 数据 | 帖子审核状态更新、统计查询 |
@@ -159,20 +159,23 @@ JSP 放在 `src/main/webapp/jsp/` 下，静态资源放 `src/main/webapp/` 下�
 | GET/POST | `/login` | Yoahoug | 已实现 |
 | GET/POST | `/register` | Yoahoug | 已实现 |
 | POST | `/logout` | Yoahoug | 已实现 |
-| GET | `/app/post/new` | xhaosen | 已接（占位页） |
-| POST | `/app/post/save` | xhaosen | 待实现 |
-| POST | `/app/post/delete` | xhaosen | 待实现 |
-| GET | `/app/my` | xhaosen | 已接（占位页） |
-| POST | `/app/like` | xhaosen | 待实现 |
-| GET | `/admin/review` | ewclpy | 已接（占位页） |
-| POST | `/admin/review` | ewclpy | 待实现 |
+| GET | `/app/post/new` | xhaosen | 已实现 |
+| POST | `/app/post/save` | xhaosen | 已实现 |
+| POST | `/app/post/delete` | xhaosen | 已实现 |
+| GET | `/app/my` | xhaosen | 已实现 |
+| POST | `/app/like` | xhaosen | 已实现 |
+| GET | `/admin/review` | ewclpy | 已实现（待审队列 + 已发布列表） |
+| POST | `/admin/review` | ewclpy | 已实现（`action` 取 `approve` / `reject`） |
 | GET | `/admin/user` | ewclpy | 已实现 |
-| POST | `/admin/user/status` | ewclpy | 待实现（当前实现为 `POST /admin/user`，待对齐） |
-| POST | `/admin/user/delete` | ewclpy | 待实现（当前实现为 `POST /admin/user`，待对齐） |
-| GET | `/admin/stats` | ewclpy | 待实现 |
+| POST | `/admin/user` | ewclpy | 已实现（`action` 取 `disable` / `enable` / `delete`） |
+| GET | `/admin/stats` | ewclpy | 已实现 |
 | GET | `/admin/stats/data` | ewclpy | 待实现 |
 
 路由名不修改。新增路由需要先更新本表。
+
+`POST /admin/user` 与下面三条此前同时保留过两种写法，现统一为一条：
+`action=disable`、`action=enable`、`action=delete` 由同一个 Servlet 按参数分派。
+原表中的 `POST /admin/user/status`、`POST /admin/user/delete` 不再单独实现。
 
 补充一条：`GET /` 本身不能直接映射给 Servlet（`<url-pattern>/</url-pattern>` 会
 接管所有静态资源），所以 `/` 用 `Yoa_Index.jsp` 作欢迎页转发到 `/home`，
@@ -221,6 +224,7 @@ Servlet 和过滤器统一用注解声明，`web.xml` 里不再登记：
 | `com.hollow.util.Yoa_HtmlUtil` | `escape(text)` | HTML 转义，**自己拼 HTML 字符串时必须调用** |
 | `com.hollow.util.Yoa_DBUtil` | `getConnection()` | 获取数据库连接，配合 try-with-resources 用 |
 | `com.hollow.util.Yoa_PasswordUtil` | `hash(raw)` / `check(raw, hash)` | 密码哈希与校验 |
+| `com.hollow.util.Yoa_RedirectUtil` | `safeBackPath(request, fallback)` | 从 Referer 中只取本站路径，避免开放重定向 |
 | `com.hollow.bean.Yoa_User` | `getId()` `getNickname()` `isAdmin()` 等 | 用户对象 |
 
 页面里输出用户内容，用 JSTL 的 `<c:out>` 已经自动转义，不用再调 `Yoa_HtmlUtil`：
@@ -244,7 +248,7 @@ Servlet 和过滤器统一用注解声明，`web.xml` 里不再登记：
 PENDING   待审核，仅作者本人与管理员可见
 PUBLISHED 已通过，公开可见
 REJECTED  已驳回，仅作者本人可见，附带驳回理由
-HIDDEN    已隐藏，曾公开后被下架
+HIDDEN    历史数据，后台已取消隐藏操作，仅用于兼容已存在的帖子
 ```
 
 规则：
@@ -340,29 +344,29 @@ UPDATE post SET like_count = like_count + 1 WHERE id = ?;
 负责人已经建好下列占位入口。路由和 Servlet 都已接好，**只差页面内容**。
 认领方式：改自己名下那个 JSP 即可，不用动 Servlet、不用动 `web.xml`。
 
-| 成员 | 路由 | Servlet（已建好） | 要改的页面文件 | 现在的状态 |
+四个模块都完成后，占位页已被正式页面取代，现状如下：
+
+| 成员 | 路由 | Servlet | 页面文件 | 现在的状态 |
 | --- | --- | --- | --- | --- |
 | yujie8791-ai | `GET /home` | `Yuj_HomeServlet` | `jsp/Yuj_Home.jsp` | 已实现（列表、分页、搜索） |
-| xhaosen1 | `GET /app/post/new` | `Xhs_PostNewServlet` | `jsp/post/Xhs_PostNew.jsp` | 占位文字 |
-| xhaosen1 | `GET /app/my` | `Xhs_MyServlet` | `jsp/post/Xhs_My.jsp` | 占位文字 |
-| ewclpy | `GET /admin/review` | `Ewc_ReviewServlet` | `jsp/Ewc_Review.jsp` | 占位文字 |
+| xhaosen1 | `GET /app/post/new` | `Xhs_PostNewServlet` | `jsp/post/Xhs_PostNew.jsp` | 已实现 |
+| xhaosen1 | `GET /app/my` | `Xhs_MyServlet` | `jsp/post/Xhs_My.jsp` | 已实现 |
+| ewclpy | `GET /admin/review` | `Ewc_ReviewServlet` | `jsp/Ewc_Review.jsp` | 已实现（待审队列、通过、驳回） |
 
 几点说明：
 
-1. `GET /` 由 `Yoa_Index.jsp` 转发到 `/home`，所以首页实际改的是 `home.jsp`。
+1. `GET /` 由 `Yoa_Index.jsp` 转发到 `/home`。
    `GET /` 本身无法直接映射给 Servlet，那样会抢走 css 等静态资源。
 2. `/app/*` 已经过登录过滤器，`/admin/*` 已经过管理员过滤器，
    页面里不用再自己判断登录，但**取昵称等展示仍需自己处理**。
 3. 路由名不要改。需要新增路由，先更新本文档第 6 节再改代码。
-4. 占位页目前用的是 `jsp/placeholder/` 目录，正式页面建议挪到自己模块的目录，
-   例如 `jsp/post/`、`jsp/admin/`，随各自习惯，不强制。
+4. 页面按归属加文件名前缀，见第 12 节。
 
 尚未实现、需要各自补路由的部分（本文档第 6 节已登记，但阶段一只做了 GET 入口）：
 
 | 成员 | 还缺的路由 |
 | --- | --- |
-| xhaosen1 | `POST /app/post/save`、`POST /app/post/delete`、`POST /app/like` |
-| ewclpy | `POST /admin/review`、`POST /admin/user/status`、`POST /admin/user/delete`、`GET /admin/stats`、`GET /admin/stats/data` |
+| ewclpy | `GET /admin/stats/data` |
 
 这些由各自在自己分支补，`web.xml` 不用改——Servlet 统一用
 `@WebServlet` 注解声明路由，加一个新的 Servlet 类就行。
@@ -404,3 +408,118 @@ feat/ewclpy-admin
 - 每次提交只做一件事
 - 每天开工先拉取主分支变更
 - 合并冲突由对应模块负责人处理
+
+---
+
+## 12. 文件命名约定
+
+文件名带归属前缀，一眼能看出这个文件是谁的。前缀统一下划线后接模块名。
+
+| 前缀 | 成员 | 模块 |
+| --- | --- | --- |
+| `Yoa_` | Yoahoug | 骨架、认证、权限、公共能力与界面 |
+| `Yuj_` | yujie8791-ai | 浏览：列表、详情、评论 |
+| `Xhs_` | xhaosen1 | 创作：发帖、我的、点赞 |
+| `Ewc_` | ewclpy | 治理：审核、用户管理、统计 |
+
+### Java 类
+
+Java 要求 public 类名与文件名一致，所以类名同样带前缀：
+
+```
+com.hollow.bean.Yoa_User
+com.hollow.dao.Yuj_PostQueryDao
+com.hollow.service.Xhs_LikeService
+com.hollow.servlet.Ewc_UserServlet
+```
+
+### JSP 与静态资源
+
+```
+webapp/Yoa_Index.jsp            入口页，转发到 /home
+webapp/jsp/Yoa_Header.jsp       全站页头
+webapp/jsp/Yoa_Footer.jsp       全站页脚
+webapp/jsp/Yoa_Login.jsp        登录页
+webapp/jsp/Yoa_Register.jsp     注册页
+webapp/jsp/Yuj_Home.jsp         首页
+webapp/jsp/post/Yuj_Detail.jsp  详情页
+webapp/jsp/post/Yuj_Share.jsp   分享页
+webapp/jsp/post/Xhs_My.jsp      我的页面
+webapp/jsp/post/Xhs_PostNew.jsp 发帖页
+webapp/jsp/Ewc_Review.jsp       审核页
+webapp/jsp/admin/Ewc_User.jsp   用户管理页
+webapp/jsp/admin/Ewc_Home.jsp   后台统计页
+webapp/css/Yoa_Style.css        公共样式
+webapp/css/Yuj_Browse.css       浏览侧样式
+```
+
+### SQL 与配置
+
+```
+resources/Yoa_Schema.sql            建表与初始化数据
+resources/Yoa_db.properties.example 连接配置模板
+resources/Ewc_Seed.sql              供测试用的补充数据
+```
+
+### 不参与改名
+
+以下文件名由框架或构建约定固定，改名会导致运行失败：
+
+| 文件 | 原因 |
+| --- | --- |
+| `pom.xml` | Maven 约定 |
+| `src/main/webapp/WEB-INF/web.xml` | Servlet 规范约定 |
+| `src/main/resources/db.properties` | `Yoa_DBUtil` 按此名从 classpath 读取 |
+| `.gitignore` | Git 约定 |
+
+新增文件时按上表加前缀。URL 路径、Session 键名、数据库表名不加前缀。
+
+---
+
+## 13. 文件归属核对（2026-10-23）
+
+本次按 `main` 的提交历史逐文件核对「文件名前缀」与「首次新增该文件的提交作者」，
+结论是四组前缀与模块负责人一致，没有发现前端文件错挂。
+
+### 前端文件归谁
+
+| 文件 | 归属 | 说明 |
+| --- | --- | --- |
+| `Yoa_Index.jsp` | Yoahoug | 站点入口，只转发到 `/home` |
+| `Yoa_Header.jsp`、`Yoa_Footer.jsp` | Yoahoug | 全站公共片段，不是业务页面 |
+| `Yoa_Login.jsp`、`Yoa_Register.jsp` | Yoahoug | 认证页面 |
+| `Yoa_Style.css` | Yoahoug | 公共样式 |
+| `Yuj_Home.jsp`、`post/Yuj_Detail.jsp`、`post/Yuj_Share.jsp`、`Yuj_Browse.css` | yujie8791-ai | 浏览侧页面与样式 |
+| `post/Xhs_My.jsp`、`post/Xhs_PostNew.jsp` | xhaosen1 | 创作侧页面 |
+| `Ewc_Review.jsp`、`admin/Ewc_User.jsp`、`admin/Ewc_Home.jsp` | ewclpy | 治理侧页面 |
+
+`Yoa_` 下的前端文件只覆盖入口、页头页脚、登录注册和公共样式，对应第 3 节
+「Yoahoug —— 骨架与公共层」里的「公共界面」，不计入任何一个业务模块的页面。
+业务页面分别由浏览、创作、治理三侧负责，四组都同时包含 Java 与 JSP，不存在
+「某个人只写后端、另一个人只写前端」的切法。
+
+表中的归属按最终维护人计算。三个业务模块的占位页最初由负责人在第一天搭建，
+正式页面与后端逻辑由各自负责人在 2026-10-23 完成，因此占位页的首次提交人是
+负责人，不表示业务模块归属发生变化。
+
+### 批量改名不改变归属
+
+2026-10-23 曾有两个由负责人执行的批量改名提交（`b7ef997`、`4dbcb47`），把当时
+所有源文件统一改成带前缀的名字。这两个提交已被后续的主分支历史重写替换。
+现在 `main` 上，第一天的骨架、公共界面与三个模块占位页由负责人在 `04b1f28`
+一次提交；各业务模块的正式功能提交从 2026-10-23 起分别由对应负责人提交。
+判断文件属于谁，以第 2 节分工表、第 12 节前缀表和当前 `main` 的提交人为准，
+不要以某个批量改名提交的作者为准。远端仍保留的 `feat/xhaosen-post`、
+`feat/yujie-wall` 是改名前的分支，文件名是旧名，不要用它们做归属判断。
+
+### 已知的边界例外
+
+下面两个文件的前缀写的是实际作者，但触碰了第 4 节的数据边界。需要调整的是
+代码职责，不是文件名，不要为了「看起来归负责人」而改前缀：
+
+| 文件 | 现状 | 处理方向 |
+| --- | --- | --- |
+| `Ewc_AdminUserDao.java` | ewclpy 编写，直接读写 `sys_user` | 对应联调清单 P1-5；改为调用 `Yoa_UserDao`，不要只改前缀 |
+| `Ewc_Seed.sql` | ewclpy 编写的补充测试数据 | 对应联调清单 P1-6；由负责人决定收编进 `Yoa_Schema.sql` 或保留为测试专用 |
+
+除这两处外，没有发现前缀与作者不一致的源文件。

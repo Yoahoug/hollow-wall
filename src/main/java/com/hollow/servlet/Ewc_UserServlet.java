@@ -2,6 +2,7 @@ package com.hollow.servlet;
 
 import com.hollow.bean.Yoa_User;
 import com.hollow.dao.Ewc_AdminUserDao;
+import com.hollow.util.Yoa_AuthUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,7 +20,7 @@ import java.util.List;
 @WebServlet("/admin/user")
 public class Ewc_UserServlet extends HttpServlet {
 
-    private Ewc_AdminUserDao dao = new Ewc_AdminUserDao();
+    private final Ewc_AdminUserDao dao = new Ewc_AdminUserDao();
 
     // 显示用户列表页
     @Override
@@ -39,7 +40,22 @@ public class Ewc_UserServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String action = request.getParameter("action");
-        long userId = Long.parseLong(request.getParameter("userId"));
+
+        long userId;
+        try {
+            userId = Long.parseLong(request.getParameter("userId"));
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "userId 不合法");
+            return;
+        }
+
+        // 不允许对自己停用或删除：只有一个管理员时，会把后台彻底锁死
+        boolean destructive = "disable".equals(action) || "delete".equals(action);
+        Yoa_User currentUser = Yoa_AuthUtil.currentUser(request);
+        if (destructive && currentUser != null && currentUser.getId() == userId) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "不能停用或删除当前登录的账号");
+            return;
+        }
 
         if ("disable".equals(action)) {
             dao.updateStatus(userId, "DISABLED");
@@ -47,9 +63,12 @@ public class Ewc_UserServlet extends HttpServlet {
             dao.updateStatus(userId, "ACTIVE");
         } else if ("delete".equals(action)) {
             dao.delete(userId);
+        } else {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "action 不合法");
+            return;
         }
 
         // 操作完跳回用户列表页
-        response.sendRedirect("/hollow/admin/user");
+        response.sendRedirect(request.getContextPath() + "/admin/user");
     }
 }

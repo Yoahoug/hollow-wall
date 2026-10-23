@@ -33,7 +33,7 @@
                 </c:if>
             </td>
             <td>
-                <form method="post" action="/hollow/admin/user" style="display: inline; margin: 0 5px;">
+                <form method="post" action="${ctx}/admin/user" style="display: inline; margin: 0 5px;">
                     <input type="hidden" name="userId" value="${u.id}">
                     <c:if test="${u.status == 'ACTIVE'}">
                         <button type="submit" name="action" value="disable">停用</button>

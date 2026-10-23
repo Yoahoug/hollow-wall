@@ -12,9 +12,9 @@ import java.util.List;
 public class Yuj_PostQueryService {
 
     /**
-     * 每页条数。初始化数据只有 3 条已发布帖子，用 2 条一页便于验证翻页。
+     * 每页条数。
      */
-    public static final int PAGE_SIZE = 2;
+    public static final int PAGE_SIZE = 10;
 
     private final Yuj_PostQueryDao postQueryDao = new Yuj_PostQueryDao();
 
