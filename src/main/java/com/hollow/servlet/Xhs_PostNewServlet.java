@@ -8,7 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 发帖页 Servlet（占位）。正式内容由 xhaosen1 实现。
+ * 发帖页 Servlet（xhaosen1）。
+ *
+ * GET /app/post/new   显示发帖表单
+ *
+ * 表单提交到 POST /app/post/save，由 Xhs_PostSaveServlet 处理。
+ * 未登录访问会被登录过滤器拦下并记录原始地址，登录后回到本页。
  */
 @WebServlet("/app/post/new")
 public class Xhs_PostNewServlet extends HttpServlet {
