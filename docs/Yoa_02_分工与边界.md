@@ -153,9 +153,9 @@ JSP 放在 `src/main/webapp/jsp/` 下，静态资源放 `src/main/webapp/` 下�
 | 方法 | URL | 归属 | 阶段一状态 |
 | --- | --- | --- | --- |
 | GET | `/` | yujie | 已接（`Yoa_Index.jsp` 转发到 `/home`） |
-| GET | `/post` | yujie | 待实现 |
-| GET | `/share` | yujie | 待实现 |
-| POST | `/app/comment` | yujie | 待实现 |
+| GET | `/post` | yujie | 已实现 |
+| GET | `/share` | yujie | 已实现 |
+| POST | `/app/comment` | yujie | 已实现 |
 | GET/POST | `/login` | Yoahoug | 已实现 |
 | GET/POST | `/register` | Yoahoug | 已实现 |
 | POST | `/logout` | Yoahoug | 已实现 |
@@ -166,9 +166,9 @@ JSP 放在 `src/main/webapp/jsp/` 下，静态资源放 `src/main/webapp/` 下�
 | POST | `/app/like` | xhaosen | 待实现 |
 | GET | `/admin/review` | ewclpy | 已接（占位页） |
 | POST | `/admin/review` | ewclpy | 待实现 |
-| GET | `/admin/user` | ewclpy | 待实现 |
-| POST | `/admin/user/status` | ewclpy | 待实现 |
-| POST | `/admin/user/delete` | ewclpy | 待实现 |
+| GET | `/admin/user` | ewclpy | 已实现 |
+| POST | `/admin/user/status` | ewclpy | 待实现（当前实现为 `POST /admin/user`，待对齐） |
+| POST | `/admin/user/delete` | ewclpy | 待实现（当前实现为 `POST /admin/user`，待对齐） |
 | GET | `/admin/stats` | ewclpy | 待实现 |
 | GET | `/admin/stats/data` | ewclpy | 待实现 |
 
@@ -266,6 +266,12 @@ HIDDEN    已隐藏，曾公开后被下架
 帖子正文、评论、昵称等用户输入内容，输出到页面前必须转义。
 使用 JSP 标签库输出时已自动转义，其余拼接方式需手动处理。
 
+### 评论数
+
+`post.comment_count` 列不作为展示依据：写入评论的一方不更新该列，
+浏览侧在查询时用 `SELECT COUNT(*) FROM post_comment WHERE post_id = ?`
+实时统计，列表与详情都以这个结果为准。
+
 ### 删除用户
 
 四步在同一事务内，顺序不可调整：
@@ -336,7 +342,7 @@ UPDATE post SET like_count = like_count + 1 WHERE id = ?;
 
 | 成员 | 路由 | Servlet（已建好） | 要改的页面文件 | 现在的状态 |
 | --- | --- | --- | --- | --- |
-| yujie8791-ai | `GET /home` | `Yuj_HomeServlet` | `jsp/Yuj_Home.jsp` | 占位文字 |
+| yujie8791-ai | `GET /home` | `Yuj_HomeServlet` | `jsp/Yuj_Home.jsp` | 已实现（列表、分页、搜索） |
 | xhaosen1 | `GET /app/post/new` | `Xhs_PostNewServlet` | `jsp/post/Xhs_PostNew.jsp` | 占位文字 |
 | xhaosen1 | `GET /app/my` | `Xhs_MyServlet` | `jsp/post/Xhs_My.jsp` | 占位文字 |
 | ewclpy | `GET /admin/review` | `Ewc_ReviewServlet` | `jsp/Ewc_Review.jsp` | 占位文字 |
@@ -355,9 +361,8 @@ UPDATE post SET like_count = like_count + 1 WHERE id = ?;
 
 | 成员 | 还缺的路由 |
 | --- | --- |
-| yujie8791-ai | `GET /post`、`GET /share`、`POST /app/comment` |
 | xhaosen1 | `POST /app/post/save`、`POST /app/post/delete`、`POST /app/like` |
-| ewclpy | `POST /admin/review`、`GET /admin/user`、`POST /admin/user/status`、`POST /admin/user/delete`、`GET /admin/stats`、`GET /admin/stats/data` |
+| ewclpy | `POST /admin/review`、`POST /admin/user/status`、`POST /admin/user/delete`、`GET /admin/stats`、`GET /admin/stats/data` |
 
 这些由各自在自己分支补，`web.xml` 不用改——Servlet 统一用
 `@WebServlet` 注解声明路由，加一个新的 Servlet 类就行。
