@@ -21,6 +21,15 @@
     </form>
 </div>
 
+<%-- 一次性提示：点赞 / 取消点赞的结果（由 Xhs_LikeServlet 放进 session） --%>
+<c:if test="${not empty sessionScope.flashMsg}">
+    <p class="msg ${sessionScope.flashType == 'error' ? 'msg-error' : 'msg-success'}">
+        <c:out value="${sessionScope.flashMsg}"/>
+    </p>
+    <c:remove var="flashMsg" scope="session"/>
+    <c:remove var="flashType" scope="session"/>
+</c:if>
+
 <c:if test="${not empty keyword}">
     <p class="muted search-tip">
         搜索“<c:out value="${keyword}"/>”，共 ${postPage.total} 条结果。
@@ -48,9 +57,27 @@
                 <p class="post-content"><c:out value="${fn:substring(post.content, 0, 120)}"/><c:if test="${fn:length(post.content) > 120}">…</c:if></p>
                 <div class="post-meta">
                     <span><fmt:formatDate value="${post.createdAt}" pattern="yyyy-MM-dd HH:mm"/></span>
-                    <span>赞 ${post.likeCount}</span>
                     <span>评论 ${post.commentCount}</span>
                     <span class="spacer"></span>
+                    <%-- 点赞：登录才能点，已赞过显示"已赞 N"，再点取消 --%>
+                    <c:choose>
+                        <c:when test="${empty sessionScope.loginUser}">
+                            <span>赞 ${post.likeCount}</span>
+                        </c:when>
+                        <c:when test="${likedIds.contains(post.id)}">
+                            <form class="like-form" action="${ctx}/app/like" method="post">
+                                <input type="hidden" name="postId" value="${post.id}">
+                                <input type="hidden" name="action" value="cancel">
+                                <button type="submit" class="btn-like liked" title="取消点赞">已赞 ${post.likeCount}</button>
+                            </form>
+                        </c:when>
+                        <c:otherwise>
+                            <form class="like-form" action="${ctx}/app/like" method="post">
+                                <input type="hidden" name="postId" value="${post.id}">
+                                <button type="submit" class="btn-like">赞 ${post.likeCount}</button>
+                            </form>
+                        </c:otherwise>
+                    </c:choose>
                     <a href="${ctx}/share?id=${post.id}">分享</a>
                 </div>
             </article>

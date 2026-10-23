@@ -2,6 +2,7 @@ package com.hollow.servlet;
 
 import com.hollow.bean.Yuj_PostView;
 import com.hollow.bean.Yoa_User;
+import com.hollow.service.Xhs_LikeService;
 import com.hollow.service.Yuj_CommentService;
 import com.hollow.service.Yuj_PostQueryService;
 import com.hollow.util.Yoa_AuthUtil;
@@ -23,6 +24,7 @@ public class Yuj_PostServlet extends HttpServlet {
 
     private final Yuj_PostQueryService postQueryService = new Yuj_PostQueryService();
     private final Yuj_CommentService commentService = new Yuj_CommentService();
+    private final Xhs_LikeService likeService = new Xhs_LikeService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -35,6 +37,12 @@ public class Yuj_PostServlet extends HttpServlet {
 
         request.setAttribute("post", post);
         request.setAttribute("comments", commentService.listByPost(post.getId()));
+
+        // 登录用户附带已赞帖子集合，页面据此显示"点赞 / 已赞"按钮
+        Yoa_User loginUser = Yoa_AuthUtil.currentUser(request);
+        if (loginUser != null) {
+            request.setAttribute("likedIds", likeService.findLikedPostIds(loginUser.getId()));
+        }
 
         // 评论提交失败时 Yuj_CommentServlet 通过 error 参数把原因带回来
         String error = request.getParameter("error");
