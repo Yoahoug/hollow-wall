@@ -29,3 +29,6 @@ desktop.ini
 logs/
 *.tmp
 *.bak
+
+# ---- 联调记录（只在本地，不提交）----
+docs/03-联调待修复清单.md
