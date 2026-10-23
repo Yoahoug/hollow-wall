@@ -1,0 +1,223 @@
+/* ============================================================
+   Hollow 浏览侧样式
+   首页列表、详情页、分享页共用，只有浏览侧页面引用本文件
+   ============================================================ */
+
+/* ---------- 首页头部与搜索 ---------- */
+.browse-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.browse-head h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.search-form {
+    display: flex;
+    gap: 8px;
+}
+
+.search-form input {
+    width: 220px;
+    padding: 7px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.search-form input:focus {
+    outline: none;
+    border-color: #3a6ea5;
+}
+
+.btn-secondary {
+    background: #eef0f2;
+    color: #555;
+}
+
+.btn-secondary:hover {
+    background: #e2e5e8;
+}
+
+.search-tip {
+    margin: -6px 0 14px;
+}
+
+/* ---------- 帖子列表 ---------- */
+.post-card {
+    margin-bottom: 14px;
+    padding: 18px 20px;
+    background: #fff;
+    border: 1px solid #e5e6e8;
+    border-radius: 4px;
+}
+
+.post-card h2 {
+    margin: 0 0 8px;
+    font-size: 17px;
+    font-weight: normal;
+}
+
+.post-content {
+    margin: 0 0 12px;
+    color: #444;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.post-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #999;
+    font-size: 13px;
+}
+
+.post-meta .spacer {
+    margin-left: auto;
+}
+
+/* ---------- 分页 ---------- */
+.pager {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 22px 0 8px;
+    color: #666;
+}
+
+/* ---------- 空状态 ---------- */
+.empty-tip {
+    padding: 36px;
+    margin: 0 0 14px;
+    background: #fff;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    color: #888;
+    text-align: center;
+}
+
+/* ---------- 详情与分享 ---------- */
+.post-detail {
+    padding: 24px 26px;
+    background: #fff;
+    border: 1px solid #e5e6e8;
+    border-radius: 4px;
+}
+
+.post-detail h1 {
+    margin: 0 0 10px;
+    font-size: 21px;
+    font-weight: normal;
+}
+
+.post-detail .msg {
+    margin: 16px 0 0;
+}
+
+.post-body {
+    margin-top: 18px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.share-box {
+    margin-top: 18px;
+    padding: 20px 22px;
+    background: #fff;
+    border: 1px solid #e5e6e8;
+    border-radius: 4px;
+}
+
+.share-box h2 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.share-url {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.share-url input {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 13px;
+    font-family: inherit;
+}
+
+/* ---------- 评论 ---------- */
+.comments {
+    margin-top: 24px;
+}
+
+.comments h2 {
+    margin: 0 0 12px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.comment-form {
+    margin-bottom: 16px;
+}
+
+.comment-form textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.comment-form textarea:focus {
+    outline: none;
+    border-color: #3a6ea5;
+}
+
+.comment-form .btn {
+    margin-top: 8px;
+}
+
+.comment-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #e5e6e8;
+    border-radius: 4px;
+}
+
+.comment-item {
+    padding: 14px 18px;
+    border-bottom: 1px solid #eef0f2;
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+}
+
+.comment-meta {
+    margin-bottom: 4px;
+    color: #999;
+    font-size: 12px;
+}
+
+.comment-content {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
