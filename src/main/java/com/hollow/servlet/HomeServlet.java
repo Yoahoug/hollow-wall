@@ -1,6 +1,9 @@
 package com.hollow.servlet;
 
+import com.hollow.bean.User;
+import com.hollow.service.LikeService;
 import com.hollow.service.PostQueryService;
+import com.hollow.util.AuthUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +19,7 @@ import java.io.IOException;
 public class HomeServlet extends HttpServlet {
 
     private final PostQueryService postQueryService = new PostQueryService();
+    private final LikeService likeService = new LikeService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -40,6 +44,12 @@ public class HomeServlet extends HttpServlet {
 
         request.setAttribute("keyword", keyword);
         request.setAttribute("postPage", postPage);
+
+        // 登录用户附带已赞帖子集合，页面据此显示"点赞 / 已赞"按钮
+        User user = AuthUtil.currentUser(request);
+        if (user != null) {
+            request.setAttribute("likedIds", likeService.findLikedPostIds(user.getId()));
+        }
 
         request.getRequestDispatcher("/jsp/placeholder/home.jsp").forward(request, response);
     }

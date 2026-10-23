@@ -10,13 +10,45 @@
     所有用户输入的内容都用 c:out 输出，页面会自动转义。
 --%>
 
+<%-- 一次性提示：点赞 / 取消点赞的结果（由 LikeServlet 放进 session） --%>
+<c:if test="${not empty sessionScope.flashMsg}">
+    <p class="msg ${sessionScope.flashType == 'error' ? 'msg-error' : 'msg-success'}">
+        <c:out value="${sessionScope.flashMsg}"/>
+    </p>
+    <c:remove var="flashMsg" scope="session"/>
+    <c:remove var="flashType" scope="session"/>
+</c:if>
+
 <article class="post-detail">
     <h1><c:out value="${post.title}"/></h1>
 
     <div class="post-meta">
         <span><fmt:formatDate value="${post.createdAt}" pattern="yyyy-MM-dd HH:mm"/></span>
-        <span>赞 ${post.likeCount}</span>
         <span>评论 ${post.commentCount}</span>
+        <%-- 点赞：登录才能点，已赞过显示"已赞 N"，再点取消 --%>
+        <c:if test="${post.status == 'PUBLISHED'}">
+            <c:choose>
+                <c:when test="${empty sessionScope.loginUser}">
+                    <span>赞 ${post.likeCount}</span>
+                </c:when>
+                <c:when test="${likedIds.contains(post.id)}">
+                    <form class="like-form" action="${ctx}/app/like" method="post">
+                        <input type="hidden" name="postId" value="${post.id}">
+                        <input type="hidden" name="action" value="cancel">
+                        <button type="submit" class="btn-like liked" title="取消点赞">已赞 ${post.likeCount}</button>
+                    </form>
+                </c:when>
+                <c:otherwise>
+                    <form class="like-form" action="${ctx}/app/like" method="post">
+                        <input type="hidden" name="postId" value="${post.id}">
+                        <button type="submit" class="btn-like">赞 ${post.likeCount}</button>
+                    </form>
+                </c:otherwise>
+            </c:choose>
+        </c:if>
+        <c:if test="${post.status != 'PUBLISHED'}">
+            <span>赞 ${post.likeCount}</span>
+        </c:if>
         <span class="spacer"></span>
         <a href="${ctx}/share?id=${post.id}">分享</a>
     </div>

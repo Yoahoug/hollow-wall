@@ -3,6 +3,7 @@ package com.hollow.servlet;
 import com.hollow.bean.PostView;
 import com.hollow.bean.User;
 import com.hollow.service.CommentService;
+import com.hollow.service.LikeService;
 import com.hollow.service.PostQueryService;
 import com.hollow.util.AuthUtil;
 
@@ -23,6 +24,7 @@ public class PostServlet extends HttpServlet {
 
     private final PostQueryService postQueryService = new PostQueryService();
     private final CommentService commentService = new CommentService();
+    private final LikeService likeService = new LikeService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -35,6 +37,12 @@ public class PostServlet extends HttpServlet {
 
         request.setAttribute("post", post);
         request.setAttribute("comments", commentService.listByPost(post.getId()));
+
+        // 登录用户附带已赞帖子集合，页面据此显示"点赞 / 已赞"按钮
+        User user = AuthUtil.currentUser(request);
+        if (user != null) {
+            request.setAttribute("likedIds", likeService.findLikedPostIds(user.getId()));
+        }
 
         // 评论提交失败时 CommentServlet 通过 error 参数把原因带回来
         String error = request.getParameter("error");
